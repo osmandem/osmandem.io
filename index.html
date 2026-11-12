@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>UT Mechanical Engineering prerequisite web, 2026–2028</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+  --bg:#EEF1F4; --paper:#F8F9FB; --grid:#DDE3EA; --ink:#1C2530; --muted:#5D6B7A; --line:#B9C3CE;
+  --edge:#8E9BAA; --orange:#BF5700;
+  --c-sci:#3E8E4E; --c-me:#1F5FA8; --c-em:#C98A00; --c-core:#C4561D; --c-es:#A5248F; --c-sel:#E0B400;
+  --anc:#BF5700; --desc:#1F7A8C; --co:#7A4BC2;
+  --elective-fill:#FFFFFF;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#151A20; --paper:#1B2129; --grid:#252D37; --ink:#E6EBF0; --muted:#99A6B4; --line:#3B4654;
+    --edge:#5E6B7A; --orange:#F07A2E;
+    --c-sci:#3F8A4E; --c-me:#2D68B0; --c-em:#B07A00; --c-core:#B4511D; --c-es:#9A2786; --c-sel:#C9A200;
+    --anc:#F07A2E; --desc:#3FB4C8; --co:#A684E6;
+    --elective-fill:#222A33;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#151A20; --paper:#1B2129; --grid:#252D37; --ink:#E6EBF0; --muted:#99A6B4; --line:#3B4654;
+  --edge:#5E6B7A; --orange:#F07A2E;
+  --c-sci:#3F8A4E; --c-me:#2D68B0; --c-em:#B07A00; --c-core:#B4511D; --c-es:#9A2786; --c-sel:#C9A200;
+  --anc:#F07A2E; --desc:#3FB4C8; --co:#A684E6;
+  --elective-fill:#222A33;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.45}
+main{max-width:1440px;margin:0 auto;padding:28px 20px 48px}
+header{display:flex;flex-wrap:wrap;gap:16px 40px;align-items:flex-end;justify-content:space-between;margin-bottom:18px}
+h1{font-stretch:75%;font-weight:800;font-size:clamp(28px,4vw,44px);line-height:1;margin:0;letter-spacing:-0.01em}
+h1 small{display:block;font-stretch:100%;font-weight:500;font-size:15px;color:var(--muted);margin-top:8px;letter-spacing:0}
+.intro{max-width:46ch;color:var(--muted);margin:0;font-size:15px}
+.controls{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:0 0 10px;font-size:14px}
+.controls label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.controls button{font:inherit;font-size:14px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 12px;cursor:pointer}
+.controls button:focus-visible,.controls input:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);margin-left:auto}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+.ln{width:26px;height:0;border-top:2px solid var(--edge);display:inline-block}
+.ln.dash{border-top-style:dashed;border-color:var(--co)}
+.board{background:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;border:1px solid var(--line);border-radius:10px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+svg#web{display:block;width:100%;min-width:1180px;height:auto;user-select:none}
+.sem-label{font-stretch:75%;font-weight:700;font-size:15px;fill:var(--ink)}
+.sem-sub{font-size:11px;fill:var(--muted)}
+.year-rule{stroke:var(--line);stroke-width:1}
+.edge{fill:none;stroke:var(--edge);stroke-width:1.3;opacity:.55;transition:opacity .15s,stroke .15s}
+.edge.co{stroke:var(--co);stroke-dasharray:5 4;opacity:.7}
+.edge.hide{display:none}
+.node{cursor:pointer}
+.node rect.box{stroke:rgba(0,0,0,.18);stroke-width:1;transition:opacity .15s}
+.node.elective rect.box{fill:var(--elective-fill);stroke:var(--line);stroke-dasharray:4 3}
+.node text{pointer-events:none}
+.node .code{font-stretch:80%;font-weight:750;font-size:15px;fill:#fff}
+.node .name{font-size:10.5px;fill:rgba(255,255,255,.9)}
+.node.elective .code{fill:var(--ink)}
+.node.elective .name{fill:var(--muted)}
+.node.lightfill .code,.node.lightfill .name{fill:#1C2530}
+.node:focus{outline:none}
+.node:focus-visible rect.ring{stroke:var(--orange);stroke-width:2.5;opacity:1}
+.ring{fill:none;stroke:transparent;stroke-width:3;opacity:0}
+/* selection states */
+svg.focusing .edge{opacity:.07}
+svg.focusing .node rect.box{opacity:.22}
+svg.focusing .node .code,svg.focusing .node .name{opacity:.35}
+svg.focusing .node.sel rect.box,svg.focusing .node.anc rect.box,svg.focusing .node.desc rect.box,svg.focusing .node.cop rect.box{opacity:1}
+svg.focusing .node.sel text,svg.focusing .node.anc text,svg.focusing .node.desc text,svg.focusing .node.cop text{opacity:1}
+.node.sel rect.ring{stroke:var(--c-sel);opacity:1;stroke-width:3.5}
+.node.anc rect.ring{stroke:var(--anc);opacity:1}
+.node.desc rect.ring{stroke:var(--desc);opacity:1}
+.node.cop rect.ring{stroke:var(--co);opacity:1}
+svg.focusing .edge.on-anc{opacity:.95;stroke:var(--anc);stroke-width:2}
+svg.focusing .edge.on-desc{opacity:.95;stroke:var(--desc);stroke-width:2}
+svg.focusing .edge.on-co{opacity:1;stroke:var(--co);stroke-width:2}
+#arrow path{fill:var(--edge)} #arrowA path{fill:var(--anc)} #arrowD path{fill:var(--desc)}
+.panel{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) minmax(0,1fr);gap:20px 32px;margin-top:18px;padding:20px 22px;background:var(--paper);border:1px solid var(--line);border-radius:10px;min-height:150px}
+.panel h2{font-stretch:75%;font-weight:800;font-size:30px;line-height:1;margin:0}
+.panel .full{font-weight:500;margin:6px 0 10px}
+.panel .meta{color:var(--muted);font-size:14px;margin:0}
+.panel h3{font-size:14px;font-weight:700;margin:0 0 6px;display:flex;align-items:center;gap:8px}
+.panel ul{list-style:none;margin:0 0 14px;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:13px;font-stretch:85%;font-weight:600;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:5px;padding:3px 8px;cursor:pointer}
+.chip:hover{border-color:var(--ink)}
+.chip:focus-visible{outline:2px solid var(--orange);outline-offset:1px}
+.none{color:var(--muted);font-size:13px}
+.empty{grid-column:1/-1;color:var(--muted);align-self:center;margin:0}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.note{font-size:13px;color:var(--muted);margin:14px 0 0;max-width:90ch}
+.progress{display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px;margin:0 0 14px;padding:14px 18px;background:var(--paper);border:1px solid var(--line);border-radius:10px}
+.pct{font-stretch:75%;font-weight:800;font-size:42px;line-height:1;min-width:3.4ch}
+.bar{flex:1 1 240px;height:12px;background:var(--bg);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--orange);transition:width .3s}
+.pstats{font-size:14px;color:var(--muted);flex:1 1 260px}
+.pstats b{color:var(--ink)}
+.progress button,.act{font:inherit;font-size:14px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 12px;cursor:pointer}
+.act.primary{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 8px}
+.progress button:focus-visible,.act:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+.node .check{display:none}
+.node.done .check{display:inline}
+svg:not(.focusing) .node.done rect.box{opacity:.5}
+svg:not(.focusing) .node.avail rect.ring{stroke:var(--orange);opacity:1;stroke-dasharray:5 3;stroke-width:2}
+svg.marking .node{cursor:copy}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+@media (max-width:820px){.panel{grid-template-columns:1fr}.legend{margin-left:0}}
+@media (prefers-reduced-motion:reduce){.edge,.node rect.box{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Mechanical Engineering prerequisite web
+      <small>UT Austin, 2026–2028 catalog, eight-semester plan, 126 hours</small></h1>
+    <p class="intro">Select a course to trace everything you need before it (orange) and everything it opens up later (teal). Dashed purple lines are co-requisites: credit or concurrent registration. Mark courses you’ve finished to track your progress; a dashed outline shows what you can take next.</p>
+  </header>
+
+  <section class="progress" aria-label="Degree progress">
+    <div class="pct" id="pct">0%</div>
+    <div class="bar" id="bar" role="progressbar" aria-label="Degree completion by credit hours" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="barFill"></i></div>
+    <div class="pstats" id="pstats" aria-live="polite"></div>
+    <button type="button" id="resetDone">Clear completed</button>
+  </section>
+
+  <div class="controls">
+    <label><input type="checkbox" id="markMode"> Tap courses to mark completed</label>
+    <label><input type="checkbox" id="showNext" checked> Outline what I can take next</label>
+    <label><input type="checkbox" id="showCo" checked> Show co-requisites</label>
+    <label><input type="checkbox" id="showElect" checked> Show electives and core</label>
+    <button type="button" id="clear">Clear selection</button>
+    <div class="legend" aria-label="Legend">
+      <span><i class="sw" style="background:var(--c-sci)"></i>Math &amp; science</span>
+      <span><i class="sw" style="background:var(--c-me)"></i>Mechanical Engineering</span>
+      <span><i class="sw" style="background:var(--c-em)"></i>Engineering Mechanics</span>
+      <span><i class="sw" style="background:var(--c-es)"></i>Writing flag</span>
+      <span><i class="sw" style="background:var(--c-core)"></i>Core curriculum</span>
+      <span><i class="ln"></i>Prerequisite</span>
+      <span><i class="ln dash"></i>Co-requisite</span>
+    </div>
+  </div>
+
+  <div class="board"><svg id="web" role="img" aria-label="Network of courses arranged by semester with prerequisite and co-requisite links"></svg></div>
+
+  <section class="panel" id="panel" aria-live="polite"><p class="empty">No course selected. Tap any box above, or use Tab and Enter to move through courses.</p></section>
+
+  <p class="note">Read from the official flowchart: where it lists “M 408D/L” or “M 408D/M”, either course satisfies the requirement, and the line is drawn from M 408D. The chart lists “PHY 103N” for M E 340, which is drawn here as PHY 105N. Career Gateway Electives have prerequisites that vary by track. Confirm requirements with the M E Academic Advising Office (ETC 2.146).</p>
+</main>
+
+<script>
+const SEMS=["Fall","Spring","Fall","Spring","Fall","Spring","Fall","Spring"];
+// pre / co entries: "ID" or "ID|label shown"
+const C=[
+ // Year 1 Fall
+ {id:"M408C",code:"M 408C",name:"Differential & Integral Calculus",h:4,s:0,cat:"sci",pre:[],co:[],note:"Requires a 70+ on the UT Math Assessment."},
+ {id:"CH301",code:"CH 301",name:"Principles of Chemistry I",h:3,s:0,cat:"sci",pre:[],co:[]},
+ {id:"ME302",code:"M E 302",name:"Intro to Engr. Design & Graphics",h:3,s:0,cat:"me",pre:[],co:[]},
+ {id:"RHE306",code:"RHE 306",name:"Rhetoric and Writing",h:3,s:0,cat:"core",pre:[],co:[]},
+ {id:"UGS",code:"UGS 302/303",name:"First-Year Signature Course",h:3,s:0,cat:"core",pre:[],co:[]},
+ // Year 1 Spring
+ {id:"M408D",code:"M 408D",name:"Sequences, Series & Multivariable Calc",h:4,s:1,cat:"sci",pre:["M408C"],co:[]},
+ {id:"PHY303K",code:"PHY 303K",name:"Engineering Physics I",h:3,s:1,cat:"sci",pre:["M408C|M 408C/K"],co:["M408D|M 408D/L","PHY105M"]},
+ {id:"PHY105M",code:"PHY 105M",name:"Lab for PHY 303K",h:1,s:1,cat:"sci",pre:[],co:["PHY303K"]},
+ {id:"ES333T",code:"E S 333T",name:"Engineering Communication",h:3,s:1,cat:"es",pre:["RHE306"],co:[]},
+ {id:"SOC",code:"Soc. Sci.",name:"Social & Behavioral Sci., approved list",h:3,s:1,cat:"core",pre:[],co:[],el:true},
+ {id:"VAPA",code:"VAPA",name:"Visual & Performing Arts, approved list",h:3,s:1,cat:"core",pre:[],co:[],el:true},
+ // Year 2 Fall
+ {id:"M427J",code:"M 427J",name:"Diff. Eqns. with Linear Algebra",h:4,s:2,cat:"sci",pre:["M408D|M 408D/L"],co:[]},
+ {id:"PHY303L",code:"PHY 303L",name:"Engineering Physics II",h:3,s:2,cat:"sci",pre:["PHY303K","PHY105M"],co:["M408D|M 408D/M","PHY105N"]},
+ {id:"PHY105N",code:"PHY 105N",name:"Lab for PHY 303L",h:1,s:2,cat:"sci",pre:["PHY105M"],co:["PHY303L"]},
+ {id:"EM306",code:"E M 306",name:"Statics",h:3,s:2,cat:"em",pre:["M408D|M 408D/L","PHY303K"],co:[]},
+ {id:"ME316T",code:"M E 316T",name:"Thermodynamics",h:3,s:2,cat:"me",pre:["CH301","M408D|M 408D/M","PHY303K"],co:[]},
+ {id:"GOV310",code:"GOV 310L",name:"American Government",h:3,s:2,cat:"core",pre:[],co:[],el:true},
+ // Year 2 Spring
+ {id:"M427L",code:"M 427L",name:"Advanced Calculus for Applications II",h:4,s:3,cat:"sci",pre:["M408D|M 408D/L"],co:[]},
+ {id:"ME318M",code:"M E 318M",name:"Intro to Comp. & Engr. Comp. Methods",h:3,s:3,cat:"me",pre:["M427J"],co:[]},
+ {id:"EM319",code:"E M 319",name:"Mechanics of Solids",h:3,s:3,cat:"em",pre:["M408D|M 408D/M","EM306"],co:[]},
+ {id:"ME314D",code:"M E 314D",name:"Dynamics",h:3,s:3,cat:"me",pre:["M408D|M 408D/M","EM306"],co:[]},
+ {id:"HIST1",code:"US History",name:"Approved US History course",h:3,s:3,cat:"core",pre:[],co:[],el:true},
+ // Year 3 Fall
+ {id:"ME335",code:"M E 335",name:"Engineering Statistics",h:3,s:4,cat:"me",pre:["M408D|M 408D/M"],co:[]},
+ {id:"ME334",code:"M E 334",name:"Materials Engineering",h:3,s:4,cat:"me",pre:["CH301","PHY303L","PHY105N","EM319"],co:["ME134L"]},
+ {id:"ME134L",code:"M E 134L",name:"Materials Engineering Lab",h:1,s:4,cat:"me",pre:[],co:["ME334"]},
+ {id:"ME330",code:"M E 330",name:"Fluid Mechanics",h:3,s:4,cat:"me",pre:["EM306","M427J","ME316T"],co:["ME130L"]},
+ {id:"ME130L",code:"M E 130L",name:"Experimental Fluid Mechanics",h:1,s:4,cat:"me",pre:[],co:["ME330"]},
+ {id:"HIST2",code:"US History",name:"Approved US History course",h:3,s:4,cat:"core",pre:[],co:[],el:true},
+ // Year 3 Spring
+ {id:"ME340",code:"M E 340",name:"Mechatronics",h:3,s:5,cat:"me",pre:["ME318M","PHY303L","PHY105N|PHY 105N (chart says 103N)"],co:["ME140L"]},
+ {id:"ME140L",code:"M E 140L",name:"Mechatronics Lab",h:1,s:5,cat:"me",pre:[],co:["ME340"]},
+ {id:"ME338",code:"M E 338",name:"Machine Elements",h:3,s:5,cat:"me",pre:["EM319","ME334"],co:[]},
+ {id:"ME339",code:"M E 339",name:"Heat Transfer",h:3,s:5,cat:"me",pre:["ME318M","ME330","ME130L"],co:["ME139L"]},
+ {id:"ME139L",code:"M E 139L",name:"Experimental Heat Transfer",h:1,s:5,cat:"me",pre:[],co:["ME339"]},
+ {id:"CGE1",code:"CGE",name:"Career Gateway Elective",h:3,s:5,cat:"cge",pre:[],co:[],el:true,note:"Prerequisites vary with each track."},
+ // Year 4 Fall
+ {id:"ME344",code:"M E 344",name:"Dynamic Systems and Controls",h:3,s:6,cat:"me",pre:["M427J","ME318M","ME314D","ME340","ME140L"],co:["ME144L"]},
+ {id:"ME144L",code:"M E 144L",name:"Dynamic Systems & Controls Lab",h:1,s:6,cat:"me",pre:[],co:["ME344"]},
+ {id:"ME353",code:"M E 353",name:"Engineering Finance",h:3,s:6,cat:"me",pre:["ME335"],co:[]},
+ {id:"ME366J",code:"M E 366J",name:"ME Design Methodology",h:3,s:6,cat:"me",pre:["ME302","ES333T","ME330","ME130L","ME335","ME338","ME339","ME139L","ME340","ME140L"],co:[],note:"Writing flag course."},
+ {id:"CGE2",code:"CGE",name:"Career Gateway Elective",h:3,s:6,cat:"cge",pre:[],co:[],el:true,note:"Prerequisites vary with each track."},
+ {id:"GOV312",code:"GOV 312L/P",name:"Topics in Government",h:3,s:6,cat:"core",pre:[],co:[],el:true},
+ // Year 4 Spring
+ {id:"ME466E",code:"M E 466E",name:"Senior Design Project",h:4,s:7,cat:"me",pre:["ME344","ME144L","ME353","ME366J"],co:[],note:"Writing flag course."},
+ {id:"CGE3",code:"CGE",name:"Career Gateway Elective",h:3,s:7,cat:"cge",pre:[],co:[],el:true,note:"Prerequisites vary with each track."},
+ {id:"CGE4",code:"CGE",name:"Career Gateway Elective",h:3,s:7,cat:"cge",pre:[],co:[],el:true,note:"Prerequisites vary with each track."},
+ {id:"MNS",code:"Math / Nat. Sci.",name:"Elective from ABET approved list",h:3,s:7,cat:"mns",pre:[],co:[],el:true},
+ {id:"E316",code:"E 316",name:"Masterworks of Literature (L/M/N/P)",h:3,s:7,cat:"core",pre:["RHE306"],co:[]}
+];
+const byId=Object.fromEntries(C.map(c=>[c.id,c]));
+const parse=r=>{const[id,label]=r.split("|");return{id,label:label||byId[id].code}};
+C.forEach(c=>{c.preP=c.pre.map(parse);c.coP=c.co.map(parse);c.unlocks=[]});
+C.forEach(c=>c.preP.forEach(p=>byId[p.id].unlocks.push(c.id)));
+
+const FILL={sci:"var(--c-sci)",me:"var(--c-me)",em:"var(--c-em)",core:"var(--c-core)",es:"var(--c-es)",mns:"#F2E24B",cge:"var(--elective-fill)"};
+const COLW=150,GAP=0,NW=128,NH=50,ROWH=68,TOP=78,LEFT=22;
+const svg=document.getElementById("web");
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a={},p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+
+// layout
+const rowsInSem=[0,0,0,0,0,0,0,0];
+C.forEach(c=>{c.r=rowsInSem[c.s]++;});
+const maxRows=Math.max(...rowsInSem);
+const W=LEFT*2+8*COLW, H=TOP+maxRows*ROWH+16;
+svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+C.forEach(c=>{c.x=LEFT+c.s*COLW+(COLW-NW)/2;c.y=TOP+c.r*ROWH});
+
+const defs=el("defs",{},svg);
+[["arrow"],["arrowA"],["arrowD"]].forEach(([id])=>{const m=el("marker",{id,viewBox:"0 0 8 8",refX:"7.5",refY:"4",markerWidth:"7",markerHeight:"7",orient:"auto"},defs);el("path",{d:"M0,0 L8,4 L0,8 z"},m)});
+
+// semester headers
+for(let i=0;i<8;i++){
+  const cx=LEFT+i*COLW+COLW/2;
+  if(i%2===0){
+    const t=el("text",{x:LEFT+i*COLW+(COLW-NW)/2,y:28,class:"sem-label"},svg);t.textContent="Year "+(i/2+1);
+    if(i>0)el("line",{x1:LEFT+i*COLW,x2:LEFT+i*COLW,y1:14,y2:H-8,class:"year-rule"},svg);
+  }
+  const hrs=C.filter(c=>c.s===i).reduce((a,c)=>a+c.h,0);
+  const s=el("text",{x:LEFT+i*COLW+(COLW-NW)/2,y:50,class:"sem-sub"},svg);s.textContent=`${SEMS[i]}, ${hrs} hrs`;
+}
+
+const gEdges=el("g",{},svg), gNodes=el("g",{},svg);
+const edges=[];
+function path(a,b,co){
+  if(a.s===b.s){ // same column arc on right side
+    const x=a.x+NW, y1=a.y+NH/2, y2=b.y+NH/2, bulge=16+Math.abs(a.r-b.r)*8;
+    return `M${x},${y1} C${x+bulge},${y1} ${x+bulge},${y2} ${x},${y2}`;
+  }
+  const [s,t]=a.s<b.s?[a,b]:[b,a];
+  const x1=s.x+NW,y1=s.y+NH/2,x2=t.x-2,y2=t.y+NH/2,dx=Math.max(30,(x2-x1)*.45);
+  return `M${x1},${y1} C${x1+dx},${y1} ${x2-dx},${y2} ${x2},${y2}`;
+}
+C.forEach(c=>{
+  c.preP.forEach(p=>{const a=byId[p.id];const e=el("path",{d:path(a,c),class:"edge pre","marker-end":"url(#arrow)"},gEdges);edges.push({from:a.id,to:c.id,type:"pre",e})});
+});
+const seenCo=new Set();
+C.forEach(c=>{
+  c.coP.forEach(p=>{const key=[c.id,p.id].sort().join("~");if(seenCo.has(key))return;seenCo.add(key);
+    const e=el("path",{d:path(byId[p.id],c,true),class:"edge co"},gEdges);edges.push({from:p.id,to:c.id,type:"co",e})});
+});
+
+const trunc=(s,n)=>s.length>n?s.slice(0,n-1).trimEnd()+"…":s;
+C.forEach(c=>{
+  const g=el("g",{class:"node"+(c.el?" elective":"")+(c.cat==="mns"?" lightfill":""),tabindex:"0",role:"button","aria-label":`${c.code}, ${c.name}`,transform:`translate(${c.x},${c.y})`},gNodes);
+  el("rect",{class:"ring",x:-4,y:-4,width:NW+8,height:NH+8,rx:9},g);
+  const r=el("rect",{class:"box",width:NW,height:NH,rx:6,fill:FILL[c.cat]},g);
+  if(c.cat==="mns"){r.removeAttribute("stroke-dasharray")}
+  const t=el("text",{x:9,y:21,class:"code"},g);t.textContent=c.code;
+  const n=el("text",{x:9,y:38,class:"name"},g);n.textContent=trunc(c.name,24);
+  const ck=el("g",{class:"check",transform:`translate(${NW-11},11)`},g);
+  el("circle",{r:8,fill:"var(--ink)"},ck);
+  el("path",{d:"M-3.5,0 L-1,2.6 L3.8,-2.8",fill:"none",stroke:"var(--paper)","stroke-width":2,"stroke-linecap":"round","stroke-linejoin":"round"},ck);
+  const ti=el("title",{},g);ti.textContent=`${c.code}: ${c.name}`;
+  c.g=g;
+  const act=()=>{if(document.getElementById("markMode").checked)toggleDone(c.id);else select(c.id)};
+  g.addEventListener("click",ev=>{ev.stopPropagation();act()});
+  g.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();act()}});
+});
+
+function ancestors(id,set=new Set()){byId[id].preP.forEach(p=>{if(!set.has(p.id)){set.add(p.id);ancestors(p.id,set)}});return set}
+function descendants(id,set=new Set()){byId[id].unlocks.forEach(u=>{if(!set.has(u)){set.add(u);descendants(u,set)}});return set}
+const depthMemo={};
+function depth(id){if(id in depthMemo)return depthMemo[id];const d=byId[id].preP.length?1+Math.max(...byId[id].preP.map(p=>depth(p.id))):0;return depthMemo[id]=d}
+const coPartners=id=>{const s=new Set(byId[id].coP.map(p=>p.id));C.forEach(c=>c.coP.forEach(p=>{if(p.id===id)s.add(c.id)}));return s};
+
+const KEY="ut-me-completed-v1";
+let done=new Set();
+try{const raw=localStorage.getItem(KEY);if(raw)JSON.parse(raw).forEach(id=>{if(byId[id])done.add(id)})}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify([...done]))}catch(e){}}
+const preMet=id=>byId[id].preP.every(p=>done.has(p.id));
+const isAvail=id=>!done.has(id)&&preMet(id)&&byId[id].coP.every(p=>done.has(p.id)||preMet(p.id));
+const TOTAL=C.reduce((a,c)=>a+c.h,0);
+function toggleDone(id){done.has(id)?done.delete(id):done.add(id);save();refresh()}
+function refresh(){
+  const showNext=document.getElementById("showNext").checked;
+  C.forEach(c=>{const d=done.has(c.id);c.g.classList.toggle("done",d);c.g.classList.toggle("avail",showNext&&isAvail(c.id));c.g.setAttribute("aria-label",`${c.code}, ${c.name}${d?", completed":""}`)});
+  const hrs=C.filter(c=>done.has(c.id)).reduce((a,c)=>a+c.h,0);
+  const pct=Math.floor(hrs/TOTAL*100);
+  document.getElementById("pct").textContent=pct+"%";
+  document.getElementById("barFill").style.width=(hrs/TOTAL*100)+"%";
+  document.getElementById("bar").setAttribute("aria-valuenow",pct);
+  const nAvail=C.filter(c=>isAvail(c.id)).length;
+  document.getElementById("pstats").innerHTML=`<b>${hrs}</b> of ${TOTAL} credit hours and <b>${done.size}</b> of ${C.length} courses completed. ${nAvail} course${nAvail===1?" is":"s are"} open to take next.`;
+  if(current)render(current);
+}
+let current=null;
+const panel=document.getElementById("panel");
+function chips(list){if(!list.length)return `<p class="none">None</p>`;return `<ul>${list.map(x=>`<li><button type="button" class="chip" data-id="${x.id}">${done.has(x.id)?"✓ ":""}${x.label}</button></li>`).join("")}</ul>`}
+function statusLine(id){
+  if(done.has(id))return "You’ve completed this course.";
+  if(isAvail(id))return "You can take this now.";
+  const c=byId[id];
+  const miss=c.preP.filter(p=>!done.has(p.id)).map(p=>p.label);
+  const coMiss=c.coP.filter(p=>!done.has(p.id)&&!preMet(p.id)).map(p=>p.label);
+  let s=miss.length?`Still needs ${miss.join(", ")}.`:"";
+  if(coMiss.length)s+=` Co-requisite not yet open: ${coMiss.join(", ")}.`;
+  return s.trim();
+}
+function select(id){
+  if(current===id){clear();return}
+  render(id);
+}
+function render(id){
+  current=id;const c=byId[id];
+  const A=ancestors(id),D=descendants(id),P=coPartners(id);
+  svg.classList.add("focusing");
+  C.forEach(n=>{n.g.classList.toggle("sel",n.id===id);n.g.classList.toggle("anc",A.has(n.id));n.g.classList.toggle("desc",D.has(n.id));n.g.classList.toggle("cop",P.has(n.id)&&!A.has(n.id)&&!D.has(n.id))});
+  edges.forEach(({from,to,type,e})=>{
+    const onA=type==="pre"&&(to===id||A.has(to))&&(A.has(from));
+    const onD=type==="pre"&&(from===id||D.has(from))&&D.has(to);
+    const onC=type==="co"&&(from===id||to===id);
+    e.classList.toggle("on-anc",onA);e.classList.toggle("on-desc",onD);e.classList.toggle("on-co",onC);
+    if(type==="pre")e.setAttribute("marker-end",onA?"url(#arrowA)":onD?"url(#arrowD)":"url(#arrow)");
+  });
+  const unlocks=c.unlocks.map(u=>({id:u,label:byId[u].code}));
+  const allA=[...A].sort((a,b)=>byId[a].s-byId[b].s).map(a=>({id:a,label:byId[a].code}));
+  const coList=[...P].map(p=>{const own=c.coP.find(x=>x.id===p);return{id:p,label:own?own.label:byId[p].code}});
+  const d=depth(id);
+  panel.innerHTML=`
+    <div>
+      <h2>${c.code}</h2>
+      <p class="full">${c.name}</p>
+      <p class="meta">${c.h} credit hour${c.h>1?"s":""}, planned for Year ${Math.floor(c.s/2)+1} ${SEMS[c.s]}.</p>
+      <p class="meta">${d?`Sits at the end of a ${d}-course prerequisite chain.`:"No course prerequisites."} ${D.size?`${D.size} later course${D.size>1?"s":""} depend on it.`:""}</p>
+      ${c.note?`<p class="meta">${c.note}</p>`:""}
+      <div class="actions">
+        <button type="button" class="act primary" id="toggleDone">${done.has(id)?"Mark as not completed":"Mark as completed"}</button>
+        ${[...A].some(a=>!done.has(a))?`<button type="button" class="act" id="chainDone">Mark it and its full chain completed</button>`:""}
+      </div>
+      <p class="meta">${statusLine(id)}</p>
+    </div>
+    <div>
+      <h3><i class="dot" style="background:var(--anc)"></i>Prerequisites (credit for)</h3>${chips(c.preP)}
+      <h3><i class="dot" style="background:var(--co)"></i>Co-requisites (credit or registration)</h3>${chips(coList)}
+    </div>
+    <div>
+      <h3><i class="dot" style="background:var(--desc)"></i>Directly unlocks</h3>${chips(unlocks)}
+      <h3><i class="dot" style="background:var(--anc)"></i>Full chain before this course</h3>${chips(allA)}
+    </div>`;
+  panel.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{select(b.dataset.id);byId[b.dataset.id].g.focus({preventScroll:true})}));
+  document.getElementById("toggleDone").addEventListener("click",()=>toggleDone(id));
+  const cb=document.getElementById("chainDone");
+  if(cb)cb.addEventListener("click",()=>{A.forEach(a=>done.add(a));done.add(id);save();refresh()});
+}
+function clear(){
+  current=null;svg.classList.remove("focusing");
+  C.forEach(n=>n.g.classList.remove("sel","anc","desc","cop"));
+  edges.forEach(({e,type})=>{e.classList.remove("on-anc","on-desc","on-co");if(type==="pre")e.setAttribute("marker-end","url(#arrow)")});
+  panel.innerHTML=`<p class="empty">No course selected. Tap any box above, or use Tab and Enter to move through courses.</p>`;
+}
+svg.addEventListener("click",clear);
+document.getElementById("clear").addEventListener("click",clear);
+document.getElementById("showCo").addEventListener("change",e=>edges.forEach(x=>{if(x.type==="co")x.e.classList.toggle("hide",!e.target.checked)}));
+document.getElementById("showElect").addEventListener("change",e=>C.forEach(c=>{if(c.el)c.g.style.display=e.target.checked?"":"none"}));
+document.getElementById("showNext").addEventListener("change",refresh);
+document.getElementById("markMode").addEventListener("change",e=>{svg.classList.toggle("marking",e.target.checked);if(e.target.checked)clear()});
+const resetBtn=document.getElementById("resetDone");let resetArmed=null;
+resetBtn.addEventListener("click",()=>{
+  if(!done.size)return;
+  if(resetArmed){clearTimeout(resetArmed);resetArmed=null;resetBtn.textContent="Clear completed";done.clear();save();refresh();return}
+  resetBtn.textContent="Tap again to clear all";
+  resetArmed=setTimeout(()=>{resetArmed=null;resetBtn.textContent="Clear completed"},3000);
+});
+refresh();
+</script>
+</body>
+</html>
