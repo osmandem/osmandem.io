@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..800&display=swap" rel="stylesheet">
 <style>
+/* ===== THEME COLORS: all colors live here as CSS variables (light mode by default) ===== */
 :root{
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
@@ -19,6 +20,7 @@
   --anc:#BF5700; --desc:#1F7A8C; --co:#7A4BC2;
   --elective-fill:#FFFFFF;
 }
+/* Dark mode: used automatically when the device is set to dark */
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
     color-scheme:dark;
@@ -29,6 +31,7 @@
     --elective-fill:#222A33;
   }
 }
+/* Same dark colors, for when the page is forced to dark via data-theme="dark" */
 :root[data-theme="dark"]{
   color-scheme:dark;
   --bg:#151A20; --paper:#1B2129; --grid:#252D37; --ink:#E6EBF0; --muted:#99A6B4; --line:#3B4654;
@@ -37,6 +40,7 @@
   --anc:#F07A2E; --desc:#3FB4C8; --co:#A684E6;
   --elective-fill:#222A33;
 }
+/* ===== PAGE LAYOUT: base font, centered content, title header ===== */
 *,*::before,*::after{box-sizing:inherit}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.45}
@@ -45,6 +49,7 @@ header{display:flex;flex-wrap:wrap;gap:16px 40px;align-items:flex-end;justify-co
 h1{font-stretch:75%;font-weight:800;font-size:clamp(28px,4vw,44px);line-height:1;margin:0;letter-spacing:-0.01em}
 h1 small{display:block;font-stretch:100%;font-weight:500;font-size:15px;color:var(--muted);margin-top:8px;letter-spacing:0}
 .intro{max-width:46ch;color:var(--muted);margin:0;font-size:15px}
+/* ===== CONTROLS ROW: checkboxes, buttons, and the color legend ===== */
 .controls{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:0 0 10px;font-size:14px}
 .controls label{display:flex;gap:6px;align-items:center;cursor:pointer}
 .controls button{font:inherit;font-size:14px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 12px;cursor:pointer}
@@ -54,14 +59,18 @@ h1 small{display:block;font-stretch:100%;font-weight:500;font-size:15px;color:va
 .sw{width:12px;height:12px;border-radius:3px;display:inline-block}
 .ln{width:26px;height:0;border-top:2px solid var(--edge);display:inline-block}
 .ln.dash{border-top-style:dashed;border-color:var(--co)}
+/* ===== BOARD: grid-paper background holding the course diagram (scrolls sideways on small screens) ===== */
 .board{background:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;border:1px solid var(--line);border-radius:10px;overflow-x:auto;-webkit-overflow-scrolling:touch}
 svg#web{display:block;width:100%;min-width:1180px;height:auto;user-select:none}
+/* Semester/year headers drawn inside the diagram */
 .sem-label{font-stretch:75%;font-weight:700;font-size:15px;fill:var(--ink)}
 .sem-sub{font-size:11px;fill:var(--muted)}
 .year-rule{stroke:var(--line);stroke-width:1}
+/* Lines connecting courses (solid = prerequisite, dashed purple = co-requisite) */
 .edge{fill:none;stroke:var(--edge);stroke-width:1.3;opacity:.55;transition:opacity .15s,stroke .15s}
 .edge.co{stroke:var(--co);stroke-dasharray:5 4;opacity:.7}
 .edge.hide{display:none}
+/* Course boxes: colored rectangle, course code, and short name */
 .node{cursor:pointer}
 .node rect.box{stroke:rgba(0,0,0,.18);stroke-width:1;transition:opacity .15s}
 .node.elective rect.box{fill:var(--elective-fill);stroke:var(--line);stroke-dasharray:4 3}
@@ -74,7 +83,8 @@ svg#web{display:block;width:100%;min-width:1180px;height:auto;user-select:none}
 .node:focus{outline:none}
 .node:focus-visible rect.ring{stroke:var(--orange);stroke-width:2.5;opacity:1}
 .ring{fill:none;stroke:transparent;stroke-width:3;opacity:0}
-/* selection states */
+/* Selection states: when a course is clicked, everything unrelated fades out and
+   prerequisites (orange), dependents (teal), and co-requisites (purple) are highlighted */
 svg.focusing .edge{opacity:.07}
 svg.focusing .node rect.box{opacity:.22}
 svg.focusing .node .code,svg.focusing .node .name{opacity:.35}
@@ -88,6 +98,7 @@ svg.focusing .edge.on-anc{opacity:.95;stroke:var(--anc);stroke-width:2}
 svg.focusing .edge.on-desc{opacity:.95;stroke:var(--desc);stroke-width:2}
 svg.focusing .edge.on-co{opacity:1;stroke:var(--co);stroke-width:2}
 #arrow path{fill:var(--edge)} #arrowA path{fill:var(--anc)} #arrowD path{fill:var(--desc)}
+/* ===== DETAILS PANEL: three-column info box shown below the diagram for the selected course ===== */
 .panel{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) minmax(0,1fr);gap:20px 32px;margin-top:18px;padding:20px 22px;background:var(--paper);border:1px solid var(--line);border-radius:10px;min-height:150px}
 .panel h2{font-stretch:75%;font-weight:800;font-size:30px;line-height:1;margin:0}
 .panel .full{font-weight:500;margin:6px 0 10px}
@@ -101,6 +112,7 @@ svg.focusing .edge.on-co{opacity:1;stroke:var(--co);stroke-width:2}
 .empty{grid-column:1/-1;color:var(--muted);align-self:center;margin:0}
 .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
 .note{font-size:13px;color:var(--muted);margin:14px 0 0;max-width:90ch}
+/* ===== PROGRESS BAR: percent complete, bar, stats, and action buttons ===== */
 .progress{display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px;margin:0 0 14px;padding:14px 18px;background:var(--paper);border:1px solid var(--line);border-radius:10px}
 .pct{font-stretch:75%;font-weight:800;font-size:42px;line-height:1;min-width:3.4ch}
 .bar{flex:1 1 240px;height:12px;background:var(--bg);border:1px solid var(--line);border-radius:6px;overflow:hidden}
@@ -111,11 +123,13 @@ svg.focusing .edge.on-co{opacity:1;stroke:var(--co);stroke-width:2}
 .act.primary{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:600}
 .actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 8px}
 .progress button:focus-visible,.act:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+/* Completed courses get a checkmark and dim; available-next courses get a dashed orange outline */
 .node .check{display:none}
 .node.done .check{display:inline}
 svg:not(.focusing) .node.done rect.box{opacity:.5}
 svg:not(.focusing) .node.avail rect.ring{stroke:var(--orange);opacity:1;stroke-dasharray:5 3;stroke-width:2}
 svg.marking .node{cursor:copy}
+/* Accessibility (no animations if the user prefers reduced motion) and phone layout (stack the panel) */
 @media (prefers-reduced-motion:reduce){.bar i{transition:none}}
 @media (max-width:820px){.panel{grid-template-columns:1fr}.legend{margin-left:0}}
 @media (prefers-reduced-motion:reduce){.edge,.node rect.box{transition:none}}
@@ -123,12 +137,14 @@ svg.marking .node{cursor:copy}
 </head>
 <body>
 <main>
+  <!-- Title and short instructions -->
   <header>
     <h1>Mechanical Engineering prerequisite web
       <small>UT Austin, 2026–2028 catalog, eight-semester plan, 126 hours</small></h1>
     <p class="intro">Select a course to trace everything you need before it (orange) and everything it opens up later (teal). Dashed purple lines are co-requisites: credit or concurrent registration. Mark courses you’ve finished to track your progress; a dashed outline shows what you can take next.</p>
   </header>
 
+  <!-- Degree progress: percent, bar, and stats are filled in by JavaScript -->
   <section class="progress" aria-label="Degree progress">
     <div class="pct" id="pct">0%</div>
     <div class="bar" id="bar" role="progressbar" aria-label="Degree completion by credit hours" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="barFill"></i></div>
@@ -136,6 +152,7 @@ svg.marking .node{cursor:copy}
     <button type="button" id="resetDone">Clear completed</button>
   </section>
 
+  <!-- Toggles for the diagram, plus the color legend -->
   <div class="controls">
     <label><input type="checkbox" id="markMode"> Tap courses to mark completed</label>
     <label><input type="checkbox" id="showNext" checked> Outline what I can take next</label>
@@ -153,15 +170,22 @@ svg.marking .node{cursor:copy}
     </div>
   </div>
 
+  <!-- The diagram itself: JavaScript draws all the course boxes and lines into this empty SVG -->
   <div class="board"><svg id="web" role="img" aria-label="Network of courses arranged by semester with prerequisite and co-requisite links"></svg></div>
 
+  <!-- Details for the selected course (filled in by JavaScript) -->
   <section class="panel" id="panel" aria-live="polite"><p class="empty">No course selected. Tap any box above, or use Tab and Enter to move through courses.</p></section>
 
+  <!-- Footnote about how the official flowchart was interpreted -->
   <p class="note">Read from the official flowchart: where it lists “M 408D/L” or “M 408D/M”, either course satisfies the requirement, and the line is drawn from M 408D. The chart lists “PHY 103N” for M E 340, which is drawn here as PHY 105N. Career Gateway Electives have prerequisites that vary by track. Confirm requirements with the M E Academic Advising Office (ETC 2.146).</p>
 </main>
 
 <script>
+// ===== COURSE DATA =====
+// Names of the 8 semesters, in order (index 0 = Year 1 Fall)
 const SEMS=["Fall","Spring","Fall","Spring","Fall","Spring","Fall","Spring"];
+// Each course: id, code (display), name, h (credit hours), s (semester index 0-7),
+// cat (color category), pre (prerequisites), co (co-requisites), el (elective/core placeholder), note.
 // pre / co entries: "ID" or "ID|label shown"
 const C=[
  // Year 1 Fall
@@ -218,29 +242,40 @@ const C=[
  {id:"MNS",code:"Math / Nat. Sci.",name:"Elective from ABET approved list",h:3,s:7,cat:"mns",pre:[],co:[],el:true},
  {id:"E316",code:"E 316",name:"Masterworks of Literature (L/M/N/P)",h:3,s:7,cat:"core",pre:["RHE306"],co:[]}
 ];
+// ===== PREPARE THE DATA =====
+// Look up any course by its id
 const byId=Object.fromEntries(C.map(c=>[c.id,c]));
+// Split "ID|label" into {id, label}; label defaults to the course's code
 const parse=r=>{const[id,label]=r.split("|");return{id,label:label||byId[id].code}};
+// Parse each course's prereq/coreq lists, then record the reverse link ("unlocks") on each prerequisite
 C.forEach(c=>{c.preP=c.pre.map(parse);c.coP=c.co.map(parse);c.unlocks=[]});
 C.forEach(c=>c.preP.forEach(p=>byId[p.id].unlocks.push(c.id)));
 
+// ===== DRAWING SETTINGS =====
+// Box fill color for each course category
 const FILL={sci:"var(--c-sci)",me:"var(--c-me)",em:"var(--c-em)",core:"var(--c-core)",es:"var(--c-es)",mns:"#F2E24B",cge:"var(--elective-fill)"};
+// Sizes in SVG units: column width, box width/height, row spacing, top and left margins
 const COLW=150,GAP=0,NW=128,NH=50,ROWH=68,TOP=78,LEFT=22;
 const svg=document.getElementById("web");
 const NS="http://www.w3.org/2000/svg";
+// Helper: create an SVG element with the given attributes and (optionally) add it to a parent
 const el=(t,a={},p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
 
-// layout
+// ===== LAYOUT =====
+// Give each course a row within its semester column, then size the SVG to fit the tallest column
 const rowsInSem=[0,0,0,0,0,0,0,0];
 C.forEach(c=>{c.r=rowsInSem[c.s]++;});
 const maxRows=Math.max(...rowsInSem);
 const W=LEFT*2+8*COLW, H=TOP+maxRows*ROWH+16;
 svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+// Pixel position of each course box
 C.forEach(c=>{c.x=LEFT+c.s*COLW+(COLW-NW)/2;c.y=TOP+c.r*ROWH});
 
+// Arrowhead shapes for the lines: normal, orange (prereq highlight), teal (unlock highlight)
 const defs=el("defs",{},svg);
 [["arrow"],["arrowA"],["arrowD"]].forEach(([id])=>{const m=el("marker",{id,viewBox:"0 0 8 8",refX:"7.5",refY:"4",markerWidth:"7",markerHeight:"7",orient:"auto"},defs);el("path",{d:"M0,0 L8,4 L0,8 z"},m)});
 
-// semester headers
+// Draw the "Year N" labels, year divider lines, and "Fall, 16 hrs" subtitles above each column
 for(let i=0;i<8;i++){
   const cx=LEFT+i*COLW+COLW/2;
   if(i%2===0){
@@ -251,8 +286,11 @@ for(let i=0;i<8;i++){
   const s=el("text",{x:LEFT+i*COLW+(COLW-NW)/2,y:50,class:"sem-sub"},svg);s.textContent=`${SEMS[i]}, ${hrs} hrs`;
 }
 
+// ===== DRAW LINES =====
+// Two groups: lines first, so course boxes are drawn on top of them
 const gEdges=el("g",{},svg), gNodes=el("g",{},svg);
 const edges=[];
+// Build the curved path between two course boxes (a loop on the right side if they're in the same semester)
 function path(a,b,co){
   if(a.s===b.s){ // same column arc on right side
     const x=a.x+NW, y1=a.y+NH/2, y2=b.y+NH/2, bulge=16+Math.abs(a.r-b.r)*8;
@@ -262,16 +300,21 @@ function path(a,b,co){
   const x1=s.x+NW,y1=s.y+NH/2,x2=t.x-2,y2=t.y+NH/2,dx=Math.max(30,(x2-x1)*.45);
   return `M${x1},${y1} C${x1+dx},${y1} ${x2-dx},${y2} ${x2},${y2}`;
 }
+// One arrow per prerequisite
 C.forEach(c=>{
   c.preP.forEach(p=>{const a=byId[p.id];const e=el("path",{d:path(a,c),class:"edge pre","marker-end":"url(#arrow)"},gEdges);edges.push({from:a.id,to:c.id,type:"pre",e})});
 });
+// One dashed line per co-requisite pair (seenCo stops the same pair being drawn twice)
 const seenCo=new Set();
 C.forEach(c=>{
   c.coP.forEach(p=>{const key=[c.id,p.id].sort().join("~");if(seenCo.has(key))return;seenCo.add(key);
     const e=el("path",{d:path(byId[p.id],c,true),class:"edge co"},gEdges);edges.push({from:p.id,to:c.id,type:"co",e})});
 });
 
+// ===== DRAW COURSE BOXES =====
+// Shorten long names with an ellipsis so they fit in the box
 const trunc=(s,n)=>s.length>n?s.slice(0,n-1).trimEnd()+"…":s;
+// For each course: a focus ring, the colored box, code + name text, a hidden checkmark, and a tooltip
 C.forEach(c=>{
   const g=el("g",{class:"node"+(c.el?" elective":"")+(c.cat==="mns"?" lightfill":""),tabindex:"0",role:"button","aria-label":`${c.code}, ${c.name}`,transform:`translate(${c.x},${c.y})`},gNodes);
   el("rect",{class:"ring",x:-4,y:-4,width:NW+8,height:NH+8,rx:9},g);
@@ -284,25 +327,39 @@ C.forEach(c=>{
   el("path",{d:"M-3.5,0 L-1,2.6 L3.8,-2.8",fill:"none",stroke:"var(--paper)","stroke-width":2,"stroke-linecap":"round","stroke-linejoin":"round"},ck);
   const ti=el("title",{},g);ti.textContent=`${c.code}: ${c.name}`;
   c.g=g;
+  // Clicking (or Enter/Space) either marks the course done or selects it, depending on "mark" mode
   const act=()=>{if(document.getElementById("markMode").checked)toggleDone(c.id);else select(c.id)};
   g.addEventListener("click",ev=>{ev.stopPropagation();act()});
   g.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();act()}});
 });
 
+// ===== RELATIONSHIP HELPERS =====
+// All courses needed before this one (prerequisites of prerequisites, and so on)
 function ancestors(id,set=new Set()){byId[id].preP.forEach(p=>{if(!set.has(p.id)){set.add(p.id);ancestors(p.id,set)}});return set}
+// All later courses that depend on this one, directly or indirectly
 function descendants(id,set=new Set()){byId[id].unlocks.forEach(u=>{if(!set.has(u)){set.add(u);descendants(u,set)}});return set}
+// Length of the longest prerequisite chain ending at this course (cached in depthMemo)
 const depthMemo={};
 function depth(id){if(id in depthMemo)return depthMemo[id];const d=byId[id].preP.length?1+Math.max(...byId[id].preP.map(p=>depth(p.id))):0;return depthMemo[id]=d}
+// Co-requisite partners in either direction (A lists B, or B lists A)
 const coPartners=id=>{const s=new Set(byId[id].coP.map(p=>p.id));C.forEach(c=>c.coP.forEach(p=>{if(p.id===id)s.add(c.id)}));return s};
 
+// ===== PROGRESS TRACKING (saved in the browser so it survives page reloads) =====
 const KEY="ut-me-completed-v1";
+// Set of completed course ids, loaded from localStorage if present
 let done=new Set();
 try{const raw=localStorage.getItem(KEY);if(raw)JSON.parse(raw).forEach(id=>{if(byId[id])done.add(id)})}catch(e){}
+// Write the completed set back to localStorage (errors ignored, e.g. private browsing)
 function save(){try{localStorage.setItem(KEY,JSON.stringify([...done]))}catch(e){}}
+// preMet: every prerequisite is completed.
+// isAvail: not done yet, prereqs met, and each co-requisite is either done or could be taken alongside.
 const preMet=id=>byId[id].preP.every(p=>done.has(p.id));
 const isAvail=id=>!done.has(id)&&preMet(id)&&byId[id].coP.every(p=>done.has(p.id)||preMet(p.id));
+// Total credit hours in the plan (used for the percent complete)
 const TOTAL=C.reduce((a,c)=>a+c.h,0);
+// Mark a course complete/incomplete, save, and redraw
 function toggleDone(id){done.has(id)?done.delete(id):done.add(id);save();refresh()}
+// Update everything that depends on progress: box states, percent, bar, stats text, and the open panel
 function refresh(){
   const showNext=document.getElementById("showNext").checked;
   C.forEach(c=>{const d=done.has(c.id);c.g.classList.toggle("done",d);c.g.classList.toggle("avail",showNext&&isAvail(c.id));c.g.setAttribute("aria-label",`${c.code}, ${c.name}${d?", completed":""}`)});
@@ -315,9 +372,13 @@ function refresh(){
   document.getElementById("pstats").innerHTML=`<b>${hrs}</b> of ${TOTAL} credit hours and <b>${done.size}</b> of ${C.length} courses completed. ${nAvail} course${nAvail===1?" is":"s are"} open to take next.`;
   if(current)render(current);
 }
+// ===== DETAILS PANEL AND SELECTION =====
+// id of the currently selected course (or null)
 let current=null;
 const panel=document.getElementById("panel");
+// Turn a list of courses into clickable "chip" buttons (with a ✓ if completed)
 function chips(list){if(!list.length)return `<p class="none">None</p>`;return `<ul>${list.map(x=>`<li><button type="button" class="chip" data-id="${x.id}">${done.has(x.id)?"✓ ":""}${x.label}</button></li>`).join("")}</ul>`}
+// One-sentence summary of whether you can take this course and what's still missing
 function statusLine(id){
   if(done.has(id))return "You’ve completed this course.";
   if(isAvail(id))return "You can take this now.";
@@ -328,10 +389,12 @@ function statusLine(id){
   if(coMiss.length)s+=` Co-requisite not yet open: ${coMiss.join(", ")}.`;
   return s.trim();
 }
+// Click a course: select it, or deselect if it was already selected
 function select(id){
   if(current===id){clear();return}
   render(id);
 }
+// Highlight the selected course's prerequisites/dependents/co-reqs in the diagram and fill in the details panel
 function render(id){
   current=id;const c=byId[id];
   const A=ancestors(id),D=descendants(id),P=coPartners(id);
@@ -369,23 +432,29 @@ function render(id){
       <h3><i class="dot" style="background:var(--desc)"></i>Directly unlocks</h3>${chips(unlocks)}
       <h3><i class="dot" style="background:var(--anc)"></i>Full chain before this course</h3>${chips(allA)}
     </div>`;
+  // Wire up the panel's buttons: chips jump to that course; the others mark completion
   panel.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{select(b.dataset.id);byId[b.dataset.id].g.focus({preventScroll:true})}));
   document.getElementById("toggleDone").addEventListener("click",()=>toggleDone(id));
   const cb=document.getElementById("chainDone");
   if(cb)cb.addEventListener("click",()=>{A.forEach(a=>done.add(a));done.add(id);save();refresh()});
 }
+// Remove all highlighting and reset the panel to its empty message
 function clear(){
   current=null;svg.classList.remove("focusing");
   C.forEach(n=>n.g.classList.remove("sel","anc","desc","cop"));
   edges.forEach(({e,type})=>{e.classList.remove("on-anc","on-desc","on-co");if(type==="pre")e.setAttribute("marker-end","url(#arrow)")});
   panel.innerHTML=`<p class="empty">No course selected. Tap any box above, or use Tab and Enter to move through courses.</p>`;
 }
+// ===== CONTROLS =====
+// Clicking empty space on the diagram, or the "Clear selection" button, deselects
 svg.addEventListener("click",clear);
 document.getElementById("clear").addEventListener("click",clear);
+// Checkboxes: show/hide co-requisite lines, show/hide electives, toggle "available next" outlines, toggle mark mode
 document.getElementById("showCo").addEventListener("change",e=>edges.forEach(x=>{if(x.type==="co")x.e.classList.toggle("hide",!e.target.checked)}));
 document.getElementById("showElect").addEventListener("change",e=>C.forEach(c=>{if(c.el)c.g.style.display=e.target.checked?"":"none"}));
 document.getElementById("showNext").addEventListener("change",refresh);
 document.getElementById("markMode").addEventListener("change",e=>{svg.classList.toggle("marking",e.target.checked);if(e.target.checked)clear()});
+// "Clear completed" needs two taps within 3 seconds, to prevent accidental resets
 const resetBtn=document.getElementById("resetDone");let resetArmed=null;
 resetBtn.addEventListener("click",()=>{
   if(!done.size)return;
@@ -393,6 +462,7 @@ resetBtn.addEventListener("click",()=>{
   resetBtn.textContent="Tap again to clear all";
   resetArmed=setTimeout(()=>{resetArmed=null;resetBtn.textContent="Clear completed"},3000);
 });
+// Initial draw: apply any saved progress when the page loads
 refresh();
 </script>
 </body>
