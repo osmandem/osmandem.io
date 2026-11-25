@@ -18,7 +18,7 @@
   --edge:#8E9BAA; --orange:#BF5700;
   --c-sci:#3E8E4E; --c-me:#1F5FA8; --c-em:#C98A00; --c-core:#C4561D; --c-es:#A5248F; --c-sel:#E0B400;
   --anc:#BF5700; --desc:#1F7A8C; --co:#7A4BC2;
-  --elective-fill:#FFFFFF;
+  --elective-fill:#222A33; --c-mns:#D4C23A;
 }
 /* Dark mode: used automatically when the device is set to dark */
 @media (prefers-color-scheme:dark){
@@ -28,7 +28,7 @@
     --edge:#5E6B7A; --orange:#F07A2E;
     --c-sci:#3F8A4E; --c-me:#2D68B0; --c-em:#B07A00; --c-core:#B4511D; --c-es:#9A2786; --c-sel:#C9A200;
     --anc:#F07A2E; --desc:#3FB4C8; --co:#A684E6;
-    --elective-fill:#222A33;
+    --elective-fill:#222A33; --c-mns:#D4C23A;
   }
 }
 /* Same dark colors, for when the page is forced to dark via data-theme="dark" */
@@ -38,7 +38,7 @@
   --edge:#5E6B7A; --orange:#F07A2E;
   --c-sci:#3F8A4E; --c-me:#2D68B0; --c-em:#B07A00; --c-core:#B4511D; --c-es:#9A2786; --c-sel:#C9A200;
   --anc:#F07A2E; --desc:#3FB4C8; --co:#A684E6;
-  --elective-fill:#222A33;
+  --elective-fill:#222A33; --c-mns:#D4C23A;
 }
 /* ===== PAGE LAYOUT: base font, centered content, title header ===== */
 *,*::before,*::after{box-sizing:inherit}
@@ -79,6 +79,7 @@ svg#web{display:block;width:100%;min-width:1180px;height:auto;user-select:none}
 .node .name{font-size:10.5px;fill:rgba(255,255,255,.9)}
 .node.elective .code{fill:var(--ink)}
 .node.elective .name{fill:var(--muted)}
+.node.lightfill rect.box{fill:var(--c-mns);stroke:rgba(0,0,0,.18);stroke-dasharray:none}
 .node.lightfill .code,.node.lightfill .name{fill:#1C2530}
 .node:focus{outline:none}
 .node:focus-visible rect.ring{stroke:var(--orange);stroke-width:2.5;opacity:1}
@@ -165,6 +166,7 @@ svg.marking .node{cursor:copy}
       <span><i class="sw" style="background:var(--c-em)"></i>Engineering Mechanics</span>
       <span><i class="sw" style="background:var(--c-es)"></i>Writing flag</span>
       <span><i class="sw" style="background:var(--c-core)"></i>Core curriculum</span>
+      <span><i class="sw" style="background:var(--c-mns)"></i>Math / science elective</span>
       <span><i class="ln"></i>Prerequisite</span>
       <span><i class="ln dash"></i>Co-requisite</span>
     </div>
@@ -253,7 +255,7 @@ C.forEach(c=>c.preP.forEach(p=>byId[p.id].unlocks.push(c.id)));
 
 // ===== DRAWING SETTINGS =====
 // Box fill color for each course category
-const FILL={sci:"var(--c-sci)",me:"var(--c-me)",em:"var(--c-em)",core:"var(--c-core)",es:"var(--c-es)",mns:"#F2E24B",cge:"var(--elective-fill)"};
+const FILL={sci:"var(--c-sci)",me:"var(--c-me)",em:"var(--c-em)",core:"var(--c-core)",es:"var(--c-es)",mns:"var(--c-mns)",cge:"var(--elective-fill)"};
 // Sizes in SVG units: column width, box width/height, row spacing, top and left margins
 const COLW=150,GAP=0,NW=128,NH=50,ROWH=68,TOP=78,LEFT=22;
 const svg=document.getElementById("web");
@@ -319,7 +321,6 @@ C.forEach(c=>{
   const g=el("g",{class:"node"+(c.el?" elective":"")+(c.cat==="mns"?" lightfill":""),tabindex:"0",role:"button","aria-label":`${c.code}, ${c.name}`,transform:`translate(${c.x},${c.y})`},gNodes);
   el("rect",{class:"ring",x:-4,y:-4,width:NW+8,height:NH+8,rx:9},g);
   const r=el("rect",{class:"box",width:NW,height:NH,rx:6,fill:FILL[c.cat]},g);
-  if(c.cat==="mns"){r.removeAttribute("stroke-dasharray")}
   const t=el("text",{x:9,y:21,class:"code"},g);t.textContent=c.code;
   const n=el("text",{x:9,y:38,class:"name"},g);n.textContent=trunc(c.name,24);
   const ck=el("g",{class:"check",transform:`translate(${NW-11},11)`},g);
